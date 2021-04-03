@@ -140,8 +140,8 @@ def kcca_embedding(TF_exp, TG_exp, normalize, n_comp=1, kernel='gaussian', reg =
     TG_embed = pd.DataFrame(kcca.ws[1], index=TG_exp.columns)
     
     if normalize == True:
-        TF_embed_norm = TF_embed.apply(lambda x:x/norm(x) if norm(x)!=0 else None, axis=1).fillna(0) #L2 norm
-        TG_embed_norm = TG_embed.apply(lambda x:x/norm(x) if norm(x)!=0 else None, axis=1).fillna(0) #L2 norm
+        TF_embed_norm = TF_embed.apply(lambda x:x/norm(x), axis=1).fillna(0) #L2 norm
+        TG_embed_norm = TG_embed.apply(lambda x:x/norm(x), axis=1).fillna(0) #L2 norm
         return (kcca, TF_embed_norm, TG_embed_norm)
     else:
         return (kcca, TF_embed, TG_embed)
