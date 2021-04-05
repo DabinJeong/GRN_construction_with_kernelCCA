@@ -1,13 +1,16 @@
-DATASETS = ['GSE127530','GSE5621','GSE5628']
-TAXONS = ['Human','Ara','Ara']
-NUM_TPS = [3,7,5]
-N_COMPS = [15,2,2]
-NORM = ['True','False','False']
-thrs = [0.5]
+datasets = list(config['datasets'].keys())
+
+results = []
+for dataset in datasets:
+        result_dat = []
+        for i in range(1,int(config['datasets'][dataset]['num_tp'])):
+                result_dat.append('result/{taxon}_{dataset}_{nComp}_norm{norm}_GRN_{threshold}_tp{i}.pkl'.format(taxon=config['datasets'][dataset]['taxon'],dataset=config['datasets'][dataset]['GEO_id'],nComp=config['datasets'][dataset]['num_comp'],norm=config['datasets'][dataset]['norm'],threshold=config['parameters']['edge_thr'],i=i))
+        results.extend(result_dat)
+
 
 rule all:
         input:
-                ['result/{taxon}_{dataset}_{nComp}_norm{norm}_GRN_{threshold}_tp{i}.pkl'.format(taxon=i1,dataset=i2,nComp=i3,norm=i4,threshold=thr,i=i) for i1,i2,i3,i4,i5 in zip(TAXONS,DATASETS,N_COMPS,NORM,NUM_TPS) for i in range(1,i5) for thr in thrs]
+                results 
 
 rule split_into_TF_nwk:
         input:
@@ -40,21 +43,25 @@ rule split_into_TG_nwk:
 rule instantiate_TF_nwk:
         input:
                 template_nwk_TF = "network_ppi/{taxon}_template_nwk_TF.tsv"
+        params:
+                corrCut = config["parameters"]["corr_thr"]
         output:
                 inst_nwk_TF  = "TFTG_cluster/{taxon}_{dataset}_condition_specific_nwk_TF.tsv"
         shell:
                 """
-                python 0_instantiate_nwk.py {input.template_nwk_TF} data/{wildcards.taxon}_{wildcards.dataset}_gene_exp_profile  -corrCut 0.5 -o {output.inst_nwk_TF} -nThreads 50
+                python 0_instantiate_nwk.py {input.template_nwk_TF} data/{wildcards.taxon}_{wildcards.dataset}_gene_exp_profile  -corrCut {params.corrCut} -o {output.inst_nwk_TF} -nThreads 50
                 """      
 
 rule instantiate_TG_nwk:
         input:
                 template_nwk_TG = "network_ppi/{taxon}_template_nwk_TG.tsv"
+        params:
+                corrCut = config["parameters"]["corr_thr"]        
         output:
                 inst_nwk_TG  = "TFTG_cluster/{taxon}_{dataset}_condition_specific_nwk_TG.tsv"
         shell:
                 """
-                python 0_instantiate_nwk.py {input.template_nwk_TG} data/{wildcards.taxon}_{wildcards.dataset}_gene_exp_profile -corrCut 0.5 -o {output.inst_nwk_TG} -nThreads 50
+                python 0_instantiate_nwk.py {input.template_nwk_TG} data/{wildcards.taxon}_{wildcards.dataset}_gene_exp_profile -corrCut {params.corrCut} -o {output.inst_nwk_TG} -nThreads 50
                 """
 
 rule cluster_TF_nwk:
@@ -108,8 +115,8 @@ rule inferGRN:
                 dict_cluster_TF = "TFTG_cluster/{taxon}_{dataset}_community_TF.pkl",
                 dict_cluster_TG = "TFTG_cluster/{taxon}_{dataset}_community_TG.pkl"
         params:
-                nThreads = "2",
-                reg = "0.2"
+                nThreads = config["parameters"]["nThreads"],
+                reg = config["parameters"]["reg_kernel"] 
         output:
                 "result/{taxon}_{dataset}_{nComp}_norm{norm}_GRN_{thr}_tp{i}.pkl"
         shell:

@@ -1,0 +1,27 @@
+parameters:
+        nThreads: 2
+        reg_kernel: 0.2
+        corr_thr: 0.5
+        edge_thr: 0.5
+
+datasets:
+        DATASET1:
+                GEO_id: 'GSE127530'
+                taxon: 'Human'
+                num_tp: 3
+                num_comp: 15
+                norm: True
+
+        DATASET2:
+                GEO_id: 'GSE5621'
+                taxon: 'Ara'
+                num_tp: 7
+                num_comp: 2
+                norm: False 
+
+        DATASET3:
+                GEO_id: 'GSE5628'
+                taxon: 'Ara'
+                num_tp: 5
+                num_comp: 2
+                norm: False 
