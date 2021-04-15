@@ -15,13 +15,13 @@ For time-series transcriptome data of Homo Sapiens or Arabidopsis Thaliana, we p
 Since the method is composed of multiple scripts, the method is implemented with workflow management system, Snakemake.
 config.yaml contains hyperparameters and informations about datasets. You can run the method with your dataset, modifying config.yaml files. Input data should be stored in data folder. 
 <br><br>
-[Input data]
+[Input]
 
-* `./data/{taxon}\_{dataset identifier}\_gene\_exp\_profile`
+* `./data/{taxon}_{dataset identifier}_gene_exp_profile`
 <br>: gene expression profile (gene X sample matrix) with all time points concatenated.
-* `./data/{taxon}\_{dataset identifier}\_gene\_exp\_profile\_tp{i}`
+* `./data/{taxon}_{dataset identifier}_gene_exp_profile_tp{i}`
 <br>: gene expression profile (gene X sample matrix)of each time point i
-* `./data/{taxon}\_{dataset identifier}\_DEG\_tp{i}`
+* `./data/{taxon}_{dataset identifier}_DEG_tp{i}`
 <br>: list of genes that are identified as DEG each time point i
 
 <br>
@@ -40,7 +40,14 @@ config.yaml contains hyperparameters and informations about datasets. You can ru
 	3. **num_tp**: numer of time points in the dataset
 	4. **num_comp**: number of canonical components, should be less than number of replicates (or sample size)
 	5. **norm**: if True, minMaxScaler is applied to the embedding of gene retreived from kernel CCA.
+<br><br>
 
+[Output]
+
+* `./TFTG_cluster/{taxon}_{dataset identifier}_community_TF.tsv`,`./TFTG_cluster/{taxon}_{dataset identifier}_community_TG.tsv` <br>
+: Co-working TFs and co-regulated TGs are clustered (represneted as cricles in the figure above) and suggested as tsv files. First column represents genes and second column represents community id that the gene is assigned for.
+* `./result/{taxon}_{dataset identifier}_{num_comp}_norm{norm}_GRN_{edge_thr}_tp{i}.pkl` <br>
+: results are saved as pickle file, consists of dictionary where keys are (TF community id, TG community id) and values are edges list of GRN sub-networks. 
 
 ## Dependencies
 
