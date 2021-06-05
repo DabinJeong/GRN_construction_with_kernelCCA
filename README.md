@@ -67,3 +67,7 @@ config.yaml contains hyperparameters and informations about datasets. You can ru
 <br>
 
 ## References
+
+2021, Frontiers in Genetics, <a href="https://www.frontiersin.org/articles/10.3389/fgene.2021.652623/abstract" style="text-decoration:none" hover="text_decoration:underline"><font size="+1"><b>Construction of Condition-Specific Gene Regulatory Network using Kernel Canonical Correlation Analysis</b></font></a>
+
+
