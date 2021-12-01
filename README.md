@@ -13,7 +13,7 @@ The novelty and advantages of our method are listed as follows.
 For time-series transcriptome data of Homo Sapiens or Arabidopsis Thaliana, we provide you with one-line command for analysis. <br>
 `snakemake --configfile config.yaml --cores 1` <br>
 Since the method is composed of multiple scripts, the method is implemented with workflow management system, Snakemake.
-config.yaml contains hyperparameters and informations about datasets. You can run the method with your dataset, modifying config.yaml files. Input data should be stored in data folder. 
+*config.yaml* contains hyperparameters and informations about datasets. You can run the method with your dataset, modifying *config.yaml* file. Input data should be stored in data folder. 
 <br><br>
 [Input]
 
